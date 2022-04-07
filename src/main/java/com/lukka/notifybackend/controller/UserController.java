@@ -38,6 +38,6 @@ public class UserController {
 
     @GetMapping("/test")
     public String test() {
-        return "This is a test";
+        return "This is a test from Simon";
     }
 }
