@@ -30,4 +30,9 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers(){
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
+
+    @DeleteMapping("/deleteUser/{email}")
+    void deleteUser(@PathVariable String email){
+        userService.deleteUser(email);
+    }
 }
