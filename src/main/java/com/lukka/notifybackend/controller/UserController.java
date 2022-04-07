@@ -19,7 +19,11 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user){
-        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/getAll")
