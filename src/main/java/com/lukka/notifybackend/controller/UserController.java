@@ -35,4 +35,9 @@ public class UserController {
     void deleteUser(@PathVariable String email){
         userService.deleteUser(email);
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "This is a test";
+    }
 }
