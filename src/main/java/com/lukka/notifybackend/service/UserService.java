@@ -15,16 +15,33 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
+    // POST
+    public User save(User user){
+        return userRepo.save(user);
+    }
+    // GET
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
 
     public User getUser(String email) {
-        Optional<User> userData = userRepo.findById(email);
-        return userData.orElse(null);
+        return userRepo.findById(email).orElseThrow(() ->
+                new ResourceNotFoundException("User", "email", email));
     }
-
-    public User addUser(User user) {
-       return userRepo.save(user);
+    // DELETE
+    public void deleteUser(String email) {
+        userRepo.findById(email).orElseThrow(() ->
+                new ResourceNotFoundException("User", "email", email));
+        userRepo.deleteById(email);
+    }
+    public void deleteAllUsers() {
+        userRepo.deleteAll();
+    }
+    // PUT
+    public User updateUser(User user, String email) {
+        User existingUser = userRepo.findById(email).orElseThrow(() ->
+                new ResourceNotFoundException("User", "email", email));
+        existingUser.setPassword(user.getPassword());
+        return userRepo.save(existingUser);
     }
 }
