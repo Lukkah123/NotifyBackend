@@ -7,6 +7,7 @@ import com.lukka.notifybackend.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -15,12 +16,13 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
-    // POST
+    // POST -----------------------------------------------------
     public User save(User user) {
         return userRepo.save(user);
     }
+    // ----------------------------------------------------------
 
-    // GET
+    // GET ------------------------------------------------------
     public List<User> getAllUsers() {
         List<User> users = userRepo.findAll();
         if (!users.isEmpty())
@@ -34,7 +36,9 @@ public class UserService {
                 new ResourceNotFoundException("User", "email", email));
     }
 
-    // DELETE
+    // ---------------------------------------------------------
+
+    // DELETE --------------------------------------------------
     public void deleteUser(String email) {
         userRepo.findById(email).orElseThrow(() ->
                 new ResourceNotFoundException("User", "email", email));
@@ -47,12 +51,14 @@ public class UserService {
             userRepo.deleteAll();
         else throw new EmptyRepositoryException("DELETE", "User");
     }
+    //---------------------------------------------------------
 
-    // PUT
+    // PUT ----------------------------------------------------
     public User updateUser(User user, String email) {
         User existingUser = userRepo.findById(email).orElseThrow(() ->
                 new ResourceNotFoundException("User", "email", email));
         existingUser.setPassword(user.getPassword());
         return userRepo.save(existingUser);
     }
+    // ---------------------------------------------------------
 }
