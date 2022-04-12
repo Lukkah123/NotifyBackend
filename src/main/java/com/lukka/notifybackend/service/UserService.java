@@ -69,9 +69,8 @@ public class UserService {
     // ---------------------------------------------------------
 
     // Functions to add / remove notes to / from a user
-    public User addNoteToUser(String email, Long noteId) {
+    public User addNoteToUser(String email, Note note) {
         User user = getUser(email);
-        Note note = noteService.getNote(noteId);
         user.addNote(note);
         return user;
     }

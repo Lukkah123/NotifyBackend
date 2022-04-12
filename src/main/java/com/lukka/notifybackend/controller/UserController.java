@@ -93,8 +93,8 @@ public class UserController {
     @PostMapping("/{email}/addNote")
     public ResponseEntity<User> addNoteToUser(@PathVariable String email, @RequestBody Note note) {
         try {
-            User user = userService.addNoteToUser(email, note.getId());
-            return new ResponseEntity<>(user, HttpStatus.OK);
+
+            return new ResponseEntity<>(userService.addNoteToUser(email, note), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
