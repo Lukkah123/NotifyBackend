@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -25,8 +26,8 @@ public class UserService {
         return null;
     }
 
-    public User getUser(String email) {
-        return userRepo.getById(email);
+    public Optional<User> getUser(String email) {
+        return userRepo.findById(email);
     }
 
     public void deleteUser(String email) {
