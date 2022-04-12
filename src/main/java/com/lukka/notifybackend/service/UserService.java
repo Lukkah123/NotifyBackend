@@ -18,10 +18,24 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepo.findAll();
+        List<User> users = userRepo.findAll();
+        if (users.size() > 1)
+            return users;
+        else
+        return null;
+    }
+
+    public User getUser(String email) {
+        return userRepo.getById(email);
     }
 
     public void deleteUser(String email) {
         userRepo.deleteById(email);
+    }
+
+    public void updateUserPassword(User user) {
+        User userToUpdate = userRepo.getById(user.getEmail());
+        userToUpdate.setPassword(user.getPassword());
+        userRepo.save(userToUpdate);
     }
 }

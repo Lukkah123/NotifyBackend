@@ -28,16 +28,32 @@ public class UserController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getAllUsers(){
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @DeleteMapping("/deleteUser/{email}")
-    void deleteUser(@PathVariable String email){
-        userService.deleteUser(email);
+    @GetMapping("/getUser/{email}")
+    public ResponseEntity<User> getUserById(@PathVariable String email) {
+        return  new ResponseEntity<>(userService.getUser(email), HttpStatus.OK);
     }
 
     @GetMapping("/test")
     public String test() {
         return "This is a test from Simon";
     }
+
+    @DeleteMapping("/deleteUser/{email}")
+    void deleteUser(@PathVariable String email){
+            userService.deleteUser(email);
+    }
+
+    @PutMapping("/updateUserPassword")
+    void updateUserPassword(@RequestBody User user) {
+        userService.updateUserPassword(user);
+    }
+
+
 }
