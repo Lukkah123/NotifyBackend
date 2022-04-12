@@ -1,7 +1,6 @@
 package com.lukka.notifybackend.controller;
 
 import com.lukka.notifybackend.model.User;
-import com.lukka.notifybackend.repo.UserRepo;
 import com.lukka.notifybackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,27 +17,27 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user){
-        try {
-            return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getAllUsers(){
         try {
-            return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+            List<User> users = userService.getAllUsers();
+            if (users.isEmpty())
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            else
+             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/getUser/{email}")
-    public ResponseEntity<Optional> getUserById(@PathVariable String email) {
-        return new ResponseEntity<>(userService.getUser(email), HttpStatus.OK);
+    public ResponseEntity<User> getUserById(@PathVariable String email) {
+        try {
+            Optional<User> userData = userService.getUser(email);
+            return userData.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/test")
@@ -46,14 +45,59 @@ public class UserController {
         return "This is a test from Simon";
     }
 
-    @DeleteMapping("/deleteUser/{email}")
-    void deleteUser(@PathVariable String email){
-            userService.deleteUser(email);
+    @PostMapping("/register")
+    public ResponseEntity<User> registerUser(@RequestBody User user){
+        try {
+            return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+        }catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PutMapping("/updateUserPassword")
-    void updateUserPassword(@RequestBody User user) {
-        userService.updateUserPassword(user);
+    @DeleteMapping("/deleteUser/{email}")
+    ResponseEntity<HttpStatus> deleteUser(@PathVariable String email){
+           try {
+                userService.deleteUser(email);
+                return new ResponseEntity<>(HttpStatus.OK);
+           } catch (Exception e) {
+               return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+           }
+    }
+
+    @DeleteMapping("/deleteAll")
+    ResponseEntity<HttpStatus> deleteAllUsers() {
+        try {
+            userService.deleteAllUsers();
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateUserPassword/{email}")
+    ResponseEntity<User> updateUserPassword(@PathVariable String email, @RequestBody User user) {
+        try {
+            Optional<User> userData = userService.getUser(email);
+            if (userData.isPresent())
+                return new ResponseEntity<>(userService.updateUserPassword(user), HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateUser/{email}")
+    ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
+        try {
+            Optional<User> userData = userService.getUser(email);
+            if (userData.isPresent())
+                return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
