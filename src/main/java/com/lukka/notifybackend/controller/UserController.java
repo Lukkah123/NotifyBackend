@@ -99,4 +99,13 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/{email}/{id}")
+    public ResponseEntity<Note> removeNoteFromUser(@PathVariable String email,@PathVariable long id) {
+        try {
+            return new ResponseEntity<>(userService.removeNoteFromUser(email, id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

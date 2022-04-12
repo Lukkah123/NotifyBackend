@@ -80,10 +80,10 @@ public class UserService {
     }
 
     @Transactional
-    public User removeNoteFromUser(String email, Long noteId) {
+    public Note removeNoteFromUser(String email, Long noteId) {
         User user = getUser(email);
         Note note = noteService.getNote(noteId);
         user.removeNote(note);
-        return user;
+        return note;
     }
 }
