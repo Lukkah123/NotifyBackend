@@ -4,7 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -23,6 +23,6 @@ public class Note {
     @NotNull
     private String body;
     @NotNull
-    private Date created;
-    private Date lastChange;
+    private LocalDateTime created;
+    private LocalDateTime lastChange;
 }
