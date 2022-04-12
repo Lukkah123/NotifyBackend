@@ -7,6 +7,7 @@ import com.lukka.notifybackend.repo.NoteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class NoteService {
         noteRepo.deleteById(id);
     }
 
+    @Transactional
     public Note updateNote(Long id, Note note) {
         Note existingNote = noteRepo.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Note", "Id", id));

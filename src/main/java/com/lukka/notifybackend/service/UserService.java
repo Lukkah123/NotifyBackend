@@ -8,6 +8,7 @@ import com.lukka.notifybackend.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -60,6 +61,7 @@ public class UserService {
     //---------------------------------------------------------
 
     // PUT ----------------------------------------------------
+    @Transactional
     public User updateUser(User user, String email) {
         User existingUser = userRepo.findById(email).orElseThrow(() ->
                 new ResourceNotFoundException("User", "email", email));
@@ -69,6 +71,7 @@ public class UserService {
     // ---------------------------------------------------------
 
     // Functions to add / remove notes to / from a user
+    @Transactional
     public User addNoteToUser(String email, Note note) {
         noteService.save(note);
         User user = getUser(email);
@@ -76,6 +79,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public User removeNoteFromUser(String email, Long noteId) {
         User user = getUser(email);
         Note note = noteService.getNote(noteId);
