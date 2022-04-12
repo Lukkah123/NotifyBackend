@@ -33,16 +33,18 @@ public class UserService {
         userRepo.deleteAll();
     }
     // PUT
-    public User updateUserPassword(User user) {
-        User userToUpdate = userRepo.getById(user.getEmail());
-        userToUpdate.setPassword(user.getPassword());
-        return userRepo.save(userToUpdate);
+    public User updateUserPassword(String password, String email) {
+        Optional<User> userData = userRepo.findById(email);
+        User updatedUser = userData.get();
+        updatedUser.setPassword(password);
+        return userRepo.save(updatedUser);
     }
 
-    public User updateUser(User user) {
-        User userToUpdate = userRepo.getById(user.getEmail());
-        userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setPassword(user.getPassword());
-        return userRepo.save(userToUpdate);
+    public User updateUser(User user, String email) {
+        Optional<User> userData = userRepo.findById(email);
+        User updatedUser = userData.get();
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setPassword(user.getPassword());
+        return userRepo.save(updatedUser);
     }
 }

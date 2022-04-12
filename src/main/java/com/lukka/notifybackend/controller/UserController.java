@@ -75,11 +75,12 @@ public class UserController {
     }
 
     @PutMapping("/updateUserPassword/{email}")
-    ResponseEntity<User> updateUserPassword(@PathVariable String email, @RequestBody User user) {
+    ResponseEntity<User> updateUserPassword(@PathVariable String email, @RequestBody String password) {
         try {
             Optional<User> userData = userService.getUser(email);
-            if (userData.isPresent())
-                return new ResponseEntity<>(userService.updateUserPassword(user), HttpStatus.OK);
+            if (userData.isPresent()) {
+                return new ResponseEntity<>(userService.updateUserPassword(password, email), HttpStatus.OK);
+            }
             else
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -92,7 +93,7 @@ public class UserController {
         try {
             Optional<User> userData = userService.getUser(email);
             if (userData.isPresent())
-                return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+                return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.OK);
             else
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
