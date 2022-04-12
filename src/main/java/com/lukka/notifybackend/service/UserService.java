@@ -21,9 +21,10 @@ public class UserService {
 
     public User getUser(String email) {
         Optional<User> userData = userRepo.findById(email);
-        if (userData.isPresent())
-            return userData.get();
-        else
-            throw new ResourceNotFoundException("User", "Email", email);
+        return userData.orElse(null);
+    }
+
+    public User addUser(User user) {
+       return userRepo.save(user);
     }
 }
