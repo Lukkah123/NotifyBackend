@@ -2,6 +2,7 @@ package com.lukka.notifybackend.controller;
 
 import com.lukka.notifybackend.exception.EmptyRepositoryException;
 import com.lukka.notifybackend.exception.ResourceNotFoundException;
+import com.lukka.notifybackend.model.Note;
 import com.lukka.notifybackend.model.User;
 import com.lukka.notifybackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,16 @@ public class UserController {
             return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/{email}/addNote")
+    public ResponseEntity<User> addNoteToUser(@PathVariable String email, @RequestBody Note note) {
+        try {
+            User user = userService.addNoteToUser(email, note.getId());
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

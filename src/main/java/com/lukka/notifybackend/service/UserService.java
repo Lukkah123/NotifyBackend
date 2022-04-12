@@ -2,6 +2,7 @@ package com.lukka.notifybackend.service;
 
 import com.lukka.notifybackend.exception.EmptyRepositoryException;
 import com.lukka.notifybackend.exception.ResourceNotFoundException;
+import com.lukka.notifybackend.model.Note;
 import com.lukka.notifybackend.model.User;
 import com.lukka.notifybackend.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,11 @@ public class UserService {
 
 
     private final UserRepo userRepo;
+    private final NoteService noteService;
     @Autowired
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, NoteService noteService) {
         this.userRepo = userRepo;
+        this.noteService = noteService;
     }
 
     // POST -----------------------------------------------------
@@ -64,4 +67,19 @@ public class UserService {
         return userRepo.save(existingUser);
     }
     // ---------------------------------------------------------
+
+    // Functions to add / remove notes to / from a user
+    public User addNoteToUser(String email, Long noteId) {
+        User user = getUser(email);
+        Note note = noteService.getNote(noteId);
+        user.addNote(note);
+        return user;
+    }
+
+    public User removeNoteFromUser(String email, Long noteId) {
+        User user = getUser(email);
+        Note note = noteService.getNote(noteId);
+        user.removeNote(note);
+        return user;
+    }
 }
