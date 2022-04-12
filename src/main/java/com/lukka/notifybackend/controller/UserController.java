@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -20,11 +19,7 @@ public class UserController {
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getAllUsers(){
         try {
-            List<User> users = userService.getAllUsers();
-            if (users.isEmpty())
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            else
-             return new ResponseEntity<>(users, HttpStatus.OK);
+            return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -32,12 +27,7 @@ public class UserController {
 
     @GetMapping("/getUser/{email}")
     public ResponseEntity<User> getUserById(@PathVariable String email) {
-        try {
-            Optional<User> userData = userService.getUser(email);
-            return userData.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(userService.getUser(email), HttpStatus.OK);
     }
 
     @GetMapping("/test")
@@ -55,47 +45,29 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser/{email}")
-    ResponseEntity<HttpStatus> deleteUser(@PathVariable String email){
+    ResponseEntity<String> deleteUser(@PathVariable String email){
            try {
                 userService.deleteUser(email);
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(email + " successfully deleted." ,HttpStatus.OK);
            } catch (Exception e) {
                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
            }
     }
 
     @DeleteMapping("/deleteAll")
-    ResponseEntity<HttpStatus> deleteAllUsers() {
+    ResponseEntity<String> deleteAllUsers() {
         try {
             userService.deleteAllUsers();
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PutMapping("/updateUserPassword/{email}")
-    ResponseEntity<User> updateUserPassword(@PathVariable String email, @RequestBody String password) {
-        try {
-            Optional<User> userData = userService.getUser(email);
-            if (userData.isPresent()) {
-                return new ResponseEntity<>(userService.updateUserPassword(password, email), HttpStatus.OK);
-            }
-            else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("All users deleted successfully.",HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/updateUser/{email}")
-    ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
+    ResponseEntity<User> updateUser(@PathVariable("email") String email, @RequestBody User user) {
         try {
-            Optional<User> userData = userService.getUser(email);
-            if (userData.isPresent())
-                return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.OK);
-            else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

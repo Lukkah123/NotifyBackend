@@ -1,5 +1,6 @@
 package com.lukka.notifybackend.service;
 
+import com.lukka.notifybackend.exception.ResourceNotFoundException;
 import com.lukka.notifybackend.model.User;
 import com.lukka.notifybackend.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,29 +23,26 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public Optional<User> getUser(String email) {
-        return userRepo.findById(email);
+    public User getUser(String email) {
+        return userRepo.findById(email).orElseThrow(() ->
+                new ResourceNotFoundException("User", "email", email));
     }
     // DELETE
     public void deleteUser(String email) {
+        userRepo.findById(email).orElseThrow(() ->
+                new ResourceNotFoundException("User", "email", email));
         userRepo.deleteById(email);
     }
     public void deleteAllUsers() {
         userRepo.deleteAll();
     }
     // PUT
-    public User updateUserPassword(String password, String email) {
-        Optional<User> userData = userRepo.findById(email);
-        User updatedUser = userData.get();
-        updatedUser.setPassword(password);
-        return userRepo.save(updatedUser);
-    }
-
     public User updateUser(User user, String email) {
-        Optional<User> userData = userRepo.findById(email);
-        User updatedUser = userData.get();
-        updatedUser.setEmail(user.getEmail());
-        updatedUser.setPassword(user.getPassword());
-        return userRepo.save(updatedUser);
+        User existingUser = userRepo.findById(email).orElseThrow(() ->
+                new ResourceNotFoundException("User", "email", email));
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(user.getPassword());
+        userRepo.save(existingUser);
+        return existingUser;
     }
 }
