@@ -3,16 +3,13 @@ package com.lukka.notifybackend.controller;
 import com.lukka.notifybackend.exception.EmptyRepositoryException;
 import com.lukka.notifybackend.exception.ResourceNotFoundException;
 import com.lukka.notifybackend.model.User;
-import com.lukka.notifybackend.repo.UserRepo;
 import com.lukka.notifybackend.service.UserService;
-import com.sun.org.apache.xml.internal.security.utils.resolver.ResourceResolverException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
