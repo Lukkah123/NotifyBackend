@@ -22,7 +22,7 @@ public class User {
     @NotNull
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_email")
     @ToString.Exclude
     private List<Note> notes = new ArrayList<>();
