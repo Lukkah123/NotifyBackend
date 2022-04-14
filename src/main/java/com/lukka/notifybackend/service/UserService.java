@@ -73,7 +73,6 @@ public class UserService {
     // Functions to add / remove notes to / from a user
     @Transactional
     public User addNoteToUser(String email, Note note) {
-        //noteService.save(note);
         User user = getUser(email);
         user.addNote(note);
         return user;

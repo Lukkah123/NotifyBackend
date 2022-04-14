@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/note")
+@RequestMapping("/api/notes")
 public class NoteController {
 
+    private final NoteService noteService;
     @Autowired
-    NoteService noteService;
+    public NoteController(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
-    @GetMapping("/getAll")
+    @GetMapping("")
     public ResponseEntity<List<Note>> getAllNotes() {
         try {
             return new ResponseEntity<>(noteService.getAllNotes(), HttpStatus.OK);
@@ -40,7 +43,7 @@ public class NoteController {
         }
     }
 
-    @PostMapping("/addNote")
+    @PostMapping("")
     public ResponseEntity<Note> addNote(@RequestBody Note note) {
         try {
             return new ResponseEntity<>(noteService.save(note), HttpStatus.CREATED);
@@ -49,7 +52,7 @@ public class NoteController {
         }
     }
 
-    @DeleteMapping("/deleteNote/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteNote(@PathVariable Long id) {
         try {
             noteService.deleteNote(id);
@@ -61,7 +64,7 @@ public class NoteController {
         }
     }
 
-    @PutMapping("/updateNote/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Note> updateNote(@PathVariable Long id, @RequestBody Note note) {
         try {
             return new ResponseEntity<>(noteService.updateNote(id, note), HttpStatus.OK);

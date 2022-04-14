@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class UserController {
 
+    private final UserService userService;
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @GetMapping("/getAll")
+    @GetMapping("")
     public ResponseEntity<List<User>> getAllUsers() {
         try {
             return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
@@ -41,12 +44,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "This is a test from Simon";
-    }
-
-    @PostMapping("/register")
+    @PostMapping("")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         try {
             return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
@@ -55,7 +53,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/deleteUser/{email}")
+    @DeleteMapping("/{email}")
     ResponseEntity<String> deleteUser(@PathVariable String email) {
         try {
             userService.deleteUser(email);
@@ -79,7 +77,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/updateUser/{email}")
+    @PutMapping("/{email}")
     ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
         try {
             return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.OK);
