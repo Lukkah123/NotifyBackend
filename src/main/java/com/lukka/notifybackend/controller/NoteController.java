@@ -52,6 +52,17 @@ public class NoteController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Note> updateNote(@PathVariable Long id, @RequestBody Note note) {
+        try {
+            return new ResponseEntity<>(noteService.updateNote(id, note), HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteNote(@PathVariable Long id) {
         try {
@@ -64,11 +75,12 @@ public class NoteController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Note> updateNote(@PathVariable Long id, @RequestBody Note note) {
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<String> deleteAllNotes() {
         try {
-            return new ResponseEntity<>(noteService.updateNote(id, note), HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
+            noteService.deleteAllNotes();
+            return new ResponseEntity<>("All notes deleted successfully.", HttpStatus.OK);
+        } catch (EmptyRepositoryException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

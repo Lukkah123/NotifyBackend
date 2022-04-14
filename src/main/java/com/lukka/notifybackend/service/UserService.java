@@ -23,13 +23,10 @@ public class UserService {
         this.noteService = noteService;
     }
 
-    // POST -----------------------------------------------------
     public User save(User user) {
         return userRepo.save(user);
     }
-    // ----------------------------------------------------------
 
-    // GET ------------------------------------------------------
     public List<User> getAllUsers() {
         List<User> users = userRepo.findAll();
         if (!users.isEmpty())
@@ -43,9 +40,6 @@ public class UserService {
                 new ResourceNotFoundException("User", "email", email));
     }
 
-    // ---------------------------------------------------------
-
-    // DELETE --------------------------------------------------
     public void deleteUser(String email) {
         userRepo.findById(email).orElseThrow(() ->
                 new ResourceNotFoundException("User", "email", email));
@@ -58,9 +52,7 @@ public class UserService {
             userRepo.deleteAll();
         else throw new EmptyRepositoryException("DELETE", "User");
     }
-    //---------------------------------------------------------
 
-    // PUT ----------------------------------------------------
     @Transactional
     public User updateUser(User user, String email) {
         User existingUser = userRepo.findById(email).orElseThrow(() ->
@@ -68,9 +60,7 @@ public class UserService {
         existingUser.setPassword(user.getPassword());
         return userRepo.save(existingUser);
     }
-    // ---------------------------------------------------------
 
-    // Functions to add / remove notes to / from a user
     @Transactional
     public User addNoteToUser(String email, Note note) {
         User user = getUser(email);

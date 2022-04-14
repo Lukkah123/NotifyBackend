@@ -45,6 +45,13 @@ public class NoteService {
         noteRepo.deleteById(id);
     }
 
+    public void deleteAllNotes() {
+        List<Note> notes = noteRepo.findAll();
+        if (!notes.isEmpty())
+            noteRepo.deleteAll();
+        else throw new EmptyRepositoryException("DELETE", "User");
+    }
+
     @Transactional
     public Note updateNote(Long id, Note note) {
         Note existingNote = noteRepo.findById(id).orElseThrow(() ->

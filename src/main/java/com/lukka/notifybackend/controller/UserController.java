@@ -53,8 +53,29 @@ public class UserController {
         }
     }
 
+    @PostMapping("/{email}/addNote")
+    public ResponseEntity<User> addNoteToUser(@PathVariable String email, @RequestBody Note note) {
+        try {
+
+            return new ResponseEntity<>(userService.addNoteToUser(email, note), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{email}")
+    public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
+        try {
+            return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/{email}")
-    ResponseEntity<String> deleteUser(@PathVariable String email) {
+    public ResponseEntity<String> deleteUser(@PathVariable String email) {
         try {
             userService.deleteUser(email);
             return new ResponseEntity<>(email + " successfully deleted.", HttpStatus.OK);
@@ -66,33 +87,12 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteAll")
-    ResponseEntity<String> deleteAllUsers() {
+    public ResponseEntity<String> deleteAllUsers() {
         try {
             userService.deleteAllUsers();
             return new ResponseEntity<>("All users deleted successfully.", HttpStatus.OK);
         } catch (EmptyRepositoryException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PutMapping("/{email}")
-    ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
-        try {
-            return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/{email}/addNote")
-    public ResponseEntity<User> addNoteToUser(@PathVariable String email, @RequestBody Note note) {
-        try {
-
-            return new ResponseEntity<>(userService.addNoteToUser(email, note), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
