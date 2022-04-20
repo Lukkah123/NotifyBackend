@@ -1,5 +1,6 @@
 package com.lukka.notifybackend.model;
 
+import com.lukka.notifybackend.service.AttributeEncryptor;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class User {
     private String email;
 
     @NotNull
+    @Convert(converter = AttributeEncryptor.class)
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
