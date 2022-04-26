@@ -91,7 +91,9 @@ SQL shell. Type "\l" to list all your databases.
 Type "\c databaseName" to connect to a particular database in the list. Once connected queries can be  
 sent to the database. In this example we only want to view the data in the database. First we can obtain  
 all tables in the database using the "\dt" command. Lastly we fetch all rows using a SELECT query.  
-Note that all passwords are encrypted in the database.
+Note that all passwords are encrypted in the database. Furthermore, if the applications hasn't been run  
+the database will be empty. Hibernate automatically creates tables from the specified @Entities.
+
 ![Image of SQL Shell connecting to database and fetching table data](images/SQLShellAllUsers.png)
 ### _Authors:_
 
