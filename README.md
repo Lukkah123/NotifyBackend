@@ -69,7 +69,7 @@ The project already contains the required PostgreSql dependency:
 ---
 Add the following to the application.properties file to connect the Spring boot application to your database:
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5555/myDatabase
+spring.datasource.url=jdbc:postgresql://localhost:5555/notifybackendtesting
 spring.datasource.username=postgres
 spring.datasource.password=mySecretPassword
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
@@ -77,7 +77,8 @@ spring.jpa.hibernate.ddl-auto=update
 ```
 NOTE:  
 Replace the number 5555 with the port your PostgreSql database is running on and myDatabase with  
-the name of your local database that you created in step 2.  
+the name of your local database that you created in step 2. Enter the password and username  
+chosen during the installation.
 
 The application is now connected to your local PostgreSql database.
 
