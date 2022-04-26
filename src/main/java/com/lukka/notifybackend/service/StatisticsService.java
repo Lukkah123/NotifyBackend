@@ -1,13 +1,13 @@
 package com.lukka.notifybackend.service;
 
 import com.lukka.notifybackend.exception.EmptyRepositoryException;
-import com.lukka.notifybackend.model.Note;
+import com.lukka.notifybackend.model.Statistics;
+import com.lukka.notifybackend.model.User;
 import com.lukka.notifybackend.repo.StatisticsRepo;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import net.bytebuddy.pool.TypePool;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -19,14 +19,30 @@ public class StatisticsService {
         this.statisticsRepo = statisticsRepo;
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<Note>> getAllStatistics() {
-        try {
-            return new ResponseEntity<>(statisticsRepo.get(0), HttpStatus.OK);
-        } catch (EmptyRepositoryException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    public List<Statistics> getStatistics() {
+        List<Statistics> users = statisticsRepo.findAll();
+        if (!users.isEmpty())
+            return users;
+        else
+            throw new EmptyRepositoryException("GET", "User");
+    }
+
+    @Transactional
+    public Statistics updateVisitorCount() {
+        checkIfNoStatistics();
+        Statistics statistics = statisticsRepo.getById(0);
+        int visitorCount = statistics.getVisitorCount() + 1;
+        statistics.setVisitorCount(visitorCount);
+        return statistics;
+    }
+
+    @Transactional
+    public void checkIfNoStatistics() {
+        System.out.println(statisticsRepo.findAll());
+        if (statisticsRepo.findAll().isEmpty()) {
+            Statistics statistics = new Statistics();
+            statistics.setVisitorCount(0);
+            statisticsRepo.save(statistics);
         }
     }
 }
