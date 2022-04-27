@@ -1,12 +1,13 @@
 package com.lukka.notifybackend.controller;
 
 import com.lukka.notifybackend.exception.EmptyRepositoryException;
-import com.lukka.notifybackend.model.Statistics;
+import com.lukka.notifybackend.model.User;
+import com.lukka.notifybackend.service.NoteService;
 import com.lukka.notifybackend.service.StatisticsService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.lukka.notifybackend.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -14,17 +15,26 @@ import java.util.List;
 public class StatisticsController {
 
     private final StatisticsService statisticsService;
+    private final UserService userService;
+    private final NoteService noteService;
 
-    public StatisticsController(StatisticsService statisticsService) {
+    public StatisticsController(StatisticsService statisticsService, UserService userService, NoteService noteService) {
         this.statisticsService = statisticsService;
+        this.userService = userService;
+        this.noteService = noteService;
     }
 
     @GetMapping("")
-    public Statistics getStatistics() {
+    public HashMap<String, Object> getStatistics() {
+        HashMap<String, Object> map = new HashMap<>();
         try {
-            return statisticsService.updateVisitorCount();
+            List<User> users = userService.getAllUsers();
+            map.put("totalUsers", users.size());
+            map.put("pageVisits", statisticsService.updateVisitorCount());
+            map.put("totalNotes", noteService.getAllNotes().size());
+            return map;
         } catch (EmptyRepositoryException e) {
-            return new Statistics();
+            return new HashMap<>();
         }
     }
 

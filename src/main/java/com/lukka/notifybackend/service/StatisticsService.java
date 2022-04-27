@@ -38,7 +38,6 @@ public class StatisticsService {
 
     @Transactional
     public void checkIfNoStatistics() {
-        System.out.println(statisticsRepo.findAll());
         if (statisticsRepo.findAll().isEmpty()) {
             Statistics statistics = new Statistics();
             statistics.setVisitorCount(0);
