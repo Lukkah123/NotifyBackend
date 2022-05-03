@@ -7,7 +7,6 @@ import com.lukka.notifybackend.model.User;
 import com.lukka.notifybackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.Cookie;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/login")
 public class LoginController implements WebMvcConfigurer {
@@ -86,8 +84,7 @@ public class LoginController implements WebMvcConfigurer {
         }
     }
 
-    // To test if the cookie is still valid
-    @RequestMapping(value = "/testCookie", method = RequestMethod.POST, headers = "Accept=*/*", consumes = "application/json", produces = "application/json")
+    @RequestMapping(value = "/validateCookie", method = RequestMethod.POST, headers = "Accept=*/*", consumes = "application/json", produces = "application/json")
     public void testCookie(@RequestBody String params, HttpServletResponse response) throws IOException {
         Map<String, Object> result = paramsToMap(params);
         validateCookie(result, response);
@@ -103,11 +100,13 @@ public class LoginController implements WebMvcConfigurer {
     }
 
     public static boolean validateCookie(Map<String, Object> result, HttpServletResponse response) throws IOException {
-        if (userCookies.get(result.get("value")) != null) {
-            LocalDateTime userCookieTime = userCookies.get(result.get("value"));
+        Map<String, Object> cookie = paramsToMap(result.get("cookie").toString());
+        String email = cookie.get("value").toString();
+        if (userCookies.get(email) != null) {
+            LocalDateTime userCookieTime = userCookies.get(email);
             if (userCookieTime.isBefore(LocalDateTime.now())) {
                 response(response, 400, "Session is no longer valid");
-                userCookies.remove(result.get("value"));
+                userCookies.remove(email);
             } else {
                 response(response, 200, "Session is still valid");
                 return true;
@@ -123,7 +122,7 @@ public class LoginController implements WebMvcConfigurer {
         response.getOutputStream().println(message);
     }
 
-    private Map<String, Object> paramsToMap(@RequestBody String params) throws JsonProcessingException {
+    private static Map<String, Object> paramsToMap(@RequestBody String params) throws JsonProcessingException {
         return new ObjectMapper().readValue(params, HashMap.class);
     }
 }
