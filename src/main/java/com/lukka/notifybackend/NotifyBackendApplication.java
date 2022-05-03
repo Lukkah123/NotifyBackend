@@ -16,6 +16,7 @@ public class NotifyBackendApplication {
         SpringApplication.run(NotifyBackendApplication.class, args);
     }
 
+    //added cors
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
