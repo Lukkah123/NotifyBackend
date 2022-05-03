@@ -33,6 +33,6 @@ public class NotifyBackendApplication {
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
-    
+
      */
 }

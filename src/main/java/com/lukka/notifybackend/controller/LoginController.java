@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/login")
 public class LoginController implements WebMvcConfigurer {
@@ -29,10 +29,13 @@ public class LoginController implements WebMvcConfigurer {
     private static final int COOKIEVALIDTIME = 100; // For how many seconds a cookie is valid
     private static HashMap<String, LocalDateTime> userCookies = new HashMap<>();
 
+    /*
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**");
     }
+
+     */
 
     // Login
     @PostMapping("/")
