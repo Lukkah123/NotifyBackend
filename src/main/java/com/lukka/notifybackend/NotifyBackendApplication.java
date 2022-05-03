@@ -17,6 +17,7 @@ public class NotifyBackendApplication {
     }
 
     //added cors
+    /*
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -32,4 +33,6 @@ public class NotifyBackendApplication {
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
+    
+     */
 }
