@@ -5,6 +5,7 @@ import com.lukka.notifybackend.model.User;
 import com.lukka.notifybackend.service.NoteService;
 import com.lukka.notifybackend.service.StatisticsService;
 import com.lukka.notifybackend.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class StatisticsController {
     private final UserService userService;
     private final NoteService noteService;
 
+    @Autowired
     public StatisticsController(StatisticsService statisticsService, UserService userService, NoteService noteService) {
         this.statisticsService = statisticsService;
         this.userService = userService;

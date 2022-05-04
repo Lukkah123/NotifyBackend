@@ -20,20 +20,14 @@ import java.util.Map;
 @RequestMapping("/api/login")
 public class LoginController implements WebMvcConfigurer {
 
-
-    @Autowired
     UserService userService;
+    @Autowired
+    public LoginController(UserService userService) {
+        this.userService = userService;
+    }
 
     private static final int COOKIEVALIDTIME = 100; // For how many seconds a cookie is valid
     private static HashMap<String, LocalDateTime> userCookies = new HashMap<>();
-
-    /*
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
-    }
-
-     */
 
     // Login
     @PostMapping("/")

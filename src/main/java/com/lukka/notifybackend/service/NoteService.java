@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 public class NoteService {
 
-
     private final NoteRepo noteRepo;
     @Autowired
     public NoteService(NoteRepo noteRepo) {
