@@ -2,9 +2,7 @@ package com.lukka.notifybackend.service;
 
 import com.lukka.notifybackend.exception.EmptyRepositoryException;
 import com.lukka.notifybackend.model.Statistics;
-import com.lukka.notifybackend.model.User;
 import com.lukka.notifybackend.repo.StatisticsRepo;
-import net.bytebuddy.pool.TypePool;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
