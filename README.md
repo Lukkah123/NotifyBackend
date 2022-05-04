@@ -129,7 +129,12 @@ The picture below now shows the original value after decrypting the inputted enc
 
 Knowing that the encryption and decryption works the spring.datasource.username & spring.datasource password  
 in application.properties can be encrypted and replaced with the encrypted string shown in the picture ENC(...).  
-The last step is to add the secret key to the VM options to decrypt the values at runtime:
+The last step is to add the secret key to the VM options to decrypt the values at runtime. However, this only  
+works if the application is run using Intellij. For the .jar to work properly the jasypt.encryptor.password needs  
+to be provided in the .jar. In this case it is specifid in the application.properties as follows:  
+```properties
+jasypt.encryptor.password=NotifyKaffePaus
+```
 
 ![VM option for Jasypt runtime decryption](images/VMConfiguration.png)
 ### _Authors:_
