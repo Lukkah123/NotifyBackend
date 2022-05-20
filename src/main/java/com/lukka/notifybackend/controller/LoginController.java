@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lukka.notifybackend.exception.ResourceNotFoundException;
 import com.lukka.notifybackend.model.User;
+import com.lukka.notifybackend.repo.UserRepo;
 import com.lukka.notifybackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ import java.util.Map;
 public class LoginController implements WebMvcConfigurer {
 
     UserService userService;
+    @Autowired
+    UserRepo userRepo;
     @Autowired
     public LoginController(UserService userService) {
         this.userService = userService;
@@ -63,6 +66,7 @@ public class LoginController implements WebMvcConfigurer {
             response(response, 401, "An account with that email already exists");
         } catch (ResourceNotFoundException e) {
             response.setStatus(200);
+            userService.save(user); // Added this so that the user is actually saved in DB
             return genCookie(user.getEmail());
         }
         return null;
@@ -72,8 +76,11 @@ public class LoginController implements WebMvcConfigurer {
     @RequestMapping(value = "/", method = RequestMethod.DELETE, headers = "Accept=*/*", consumes = "application/json", produces = "application/json")
     public void logout(@RequestBody String params, HttpServletResponse response) throws IOException {
         Map<String, Object> result = paramsToMap(params);
+        Map<String, Object> cookie = paramsToMap(result.get("cookie").toString()); // Hugo kolla detta plox, lade till för att få det att funka
         if (validateCookie(result, response)) {
-            userCookies.remove(result.get("value"));
+            System.out.println(result);
+            System.out.println(cookie);
+            userCookies.remove(cookie.get("value").toString());
             response(response, 200, "Logged out");
         }
     }
